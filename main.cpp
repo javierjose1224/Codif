@@ -1,18 +1,24 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <stdlib.h>
 
 using namespace std;
-void binario(char ,int []);
-void codificar(int [], int , int);
+void binario(char ,char []);
+void codificar(char [], int , int, char []);
 
 int main()
 {
-    int c=0,bin[8]={},arr[500]={},b,x=0,semilla,tam=0;
+    int c=0,b,x=0,semilla;
+    char arr[500]={},bin[8]={},codif[500],lit[10000];
     cout<<"Ingrese la semilla: ";
     cin>>semilla;
-    ifstream archivo("rubius.txt",fstream::in | fstream::ate);
-    if(archivo.is_open())
+    ifstream archivo("rubius.txt");
+    if(!archivo.is_open())
+    {
+        cout<<"El archivo no existe";
+    }
+    else
     {
         char letra;
         while(!archivo.eof())
@@ -27,51 +33,58 @@ int main()
                 arr[x]=bin[j];
             }
         }
+    }
 
-    }
-    else
-    {
-        cout<<"El archivo no existe";
-    }
     archivo.close();
-    ////for(int i=0;i<500;i++)
-    //{
-    //	cout<<arr[i];
-    //}
-    //cout<<c<<endl;
-    codificar(arr, semilla, c);
+    codificar(arr, semilla, c, codif);
+
+    //cout<<codif;
+    for(int i=0;i<10000;i++)
+    {
+        if(codif[i]=='\0')
+        {
+            break;
+        }
+        else
+        {
+            lit[i]=codif[i];
+        }
+    }
+
+    cout<<lit;
+
     return 0;
 }
 
-void binario(char let,int bin[])
+void binario(char let,char bin[])
 {
-    int p,b,a;
+    int b,a;
     a=let;
     for(int i=7;i>=0;i--)
     {
         b=a%2;
         if(a>=32 && a<=63)
         {
-            bin[1]=0;
-            bin[0]=0;
+            bin[1]='0';
+            bin[0]='1';
         }
         else if(a>=64 && a<=126)
         {
-            bin[0]=0;
+            bin[0]='0';
         }
-        bin[i]=b;
+        bin[i]=b+48;
         a=a/2;
     }
     //for(int i=0;i<8;i++)
     //{
-    //	cout<<bin[i];
+     //   cout<<bin[i];
     //}
     //cout<<endl;
 }
 
-void codificar(int arr[], int sem, int lim)
+void codificar(char arr[], int sem, int lim, char codif[])
 {
-    int codif[500],j=0,c=1,cero=0,jp,uno=0,con=0,o=0;
+    int j=0,cero=0,jp,uno=0,con=0,o=0;
 
     for(int i=1;i<=((lim*8)/sem)+1;i++)
     {
@@ -79,26 +92,26 @@ void codificar(int arr[], int sem, int lim)
         {
             if(j<sem)
             {
-                if(arr[j]==0)
+                if(arr[j]=='0')
                 {
-                    codif[j]=1;
+                    codif[j]='1';
                 }
-                else if(arr[j]==1)
+                else if(arr[j]=='1')
                 {
-                    codif[j]=0;
+                    codif[j]='0';
                 }
             }
             else
             {
                 codif[j]=arr[j];
             }
-            cout<<arr[j];
+            //cout<<arr[j];
 
         }
         con=con+1;
-        cout<<endl;
-        cout<<"Con: "<<con<<endl;
-        cout<<endl;
+        //cout<<endl;
+        //cout<<"Con: "<<con<<endl;
+       // cout<<endl;
     }
 
     for(int i=1;i<=((lim*8)/sem)+1;i++)
@@ -107,11 +120,11 @@ void codificar(int arr[], int sem, int lim)
         {
             if(o<sem*i)
             {
-                if(arr[o]==1)
+                if(arr[o]=='1')
                 {
                     uno++;
                 }
-                else if(arr[o]==0)
+                else if(arr[o]=='0')
                 {
                     cero++;
                 }
@@ -123,16 +136,16 @@ void codificar(int arr[], int sem, int lim)
             jp=o;
             for(;jp<sem*(i+1);jp++)
             {
-                if(codif[jp]==0)
+                if(codif[jp]=='0')
                 {
-                    codif[jp]=1;
+                    codif[jp]='1';
                 }
-                else if(codif[jp]==1)
+                else if(codif[jp]=='1')
                 {
-                    codif[jp]=0;
+                    codif[jp]='0';
                 }
             }
-            cout<<"cambia cada bit"<<endl;
+            //cout<<"cambia cada bit"<<endl;
         }
         else if(cero>uno)
         {
@@ -141,13 +154,13 @@ void codificar(int arr[], int sem, int lim)
             {
                 if(cd%2==0)
                 {
-                    if(codif[jp]==0)
+                    if(codif[jp]=='0')
                     {
-                        codif[jp]=1;
+                        codif[jp]='1';
                     }
-                    else if(codif[jp]==1)
+                    else if(codif[jp]=='1')
                     {
-                        codif[jp]=0;
+                        codif[jp]='0';
                     }
                     cd=cd+1;
                 }
@@ -156,7 +169,7 @@ void codificar(int arr[], int sem, int lim)
                     cd=cd+1;
                 }
             }
-            cout<<"cambio cada dos bits"<<endl;
+            //cout<<"cambio cada dos bits"<<endl;
         }
         else if(uno>cero)
         {
@@ -165,13 +178,13 @@ void codificar(int arr[], int sem, int lim)
             {
                 if(ct%3==0)
                 {
-                    if(codif[jp]==0)
+                    if(codif[jp]=='0')
                     {
-                        codif[jp]=1;
+                        codif[jp]='1';
                     }
-                    else if(codif[jp]==1)
+                    else if(codif[jp]=='1')
                     {
-                        codif[jp]=0;
+                        codif[jp]='0';
                     }
                     ct=ct+1;
                 }
@@ -180,7 +193,7 @@ void codificar(int arr[], int sem, int lim)
                     ct=ct+1;
                 }
             }
-            cout<<"cambio cada tres bits"<<endl;
+            //cout<<"cambio cada tres bits"<<endl;
         }
         cero=0;
         uno=0;
@@ -194,12 +207,10 @@ void codificar(int arr[], int sem, int lim)
         }
         else
         {
-            cout<<codif[p];
+            //cout<<codif[p];
         }
     }
 }
-
-
 
 
 
