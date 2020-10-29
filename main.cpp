@@ -74,18 +74,19 @@ void cajero()
         {
             case 1:
             {
-                int clave, opcion, saldo;
-                char nombre[30],arr[500000],sud[12]="fichero.txt";
+                int clave, opcion, saldo,c;
+                char nombre[30],arr[500000],sudo[12]="fichero.txt",codif[100000];
                 ofstream guardar;
                 guardar.open("fichero.txt",ios::app);//abre desde salto de linea
                 ifstream entrar;
                 while(true)
                 {
-                    cout<<"(1)Guardar registro"<<endl;
-                    cout<<"(1)Ingrese opcion"<<endl;
-                    cout<<"(3)Salir"<<endl;
+                    cout<<"(1)Guardar registros"<<endl;
+                    cout<<"(2)leer registros"<<endl;
+                    cout<<"(3)Ingrese opcion"<<endl;
+                    cout<<"(0)Salir"<<endl;
                     cin>>opcion;
-                    if (opcion==3)
+                    if (opcion==0)
                     {
                         break;
                     }
@@ -100,14 +101,38 @@ void cajero()
                             cout<<"Ingrese saldo: "<<endl;
                             cin>>saldo;
                             guardar<<nombre<<" "<<clave<<" "<<saldo<<endl;
+                            c=leer(sudo,arr);
+                            codificar(arr,4,c,codif);//agrega nuevos usuarios y codifica la información
+                            escribir(sudo,codif);
+                            break;
+                        }
 
+                        case 2:
+                        {
+                            char deco[100000],trad[100000],arr[10000],codif[10000];
+                            c=leer_sin_bin(sudo,deco);
+                            decodif(deco,4,c);
+                            desbinar(deco,c,trad);
+                            ifstream fin;
+                            ofstream fout;
+                            fout.open(sudo);
+                            for(int i=1;i<c/8;i++)
+                            {                                
+                                fout << trad[i];
+                                cout<<trad[i];
+                            }                                                      
+                            fout.close();
+                            c=leer(sudo,arr);
+                            codificar(arr,4,c,codif);//guarda la informacion que leí codificada
+                            escribir(sudo,arr);
+                            cout<<endl;                           
                             break;
                         }
                     }
+                    guardar.close();
                 }
-                cout<<"sali"<<endl;
-                leer(sud,arr);
-                cout<<arr;
+
+
 
             }
             break;
@@ -169,7 +194,7 @@ void  codificacion_textos()
                 c=leer_sin_bin(nomarch,deco);
                 decodif(deco,semilla,c);
                 desbinar(deco,c,trad);
-                cout<<"Donde desea guardar la informacion codificada con (.txt): ";
+                cout<<"Donde desea guardar la informacion decodificada con (.txt): ";
                 cin>>nom;
                 ifstream fin;
                 ofstream fout;
