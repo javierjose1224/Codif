@@ -19,6 +19,8 @@ void escribir(char [],char []);
 int leer(char [],char []);
 int leer_sin_bin(char [],char []);
 
+void psr_bin_ascii(char sudo[],char []);
+
 
 int main()
 {
@@ -26,7 +28,7 @@ int main()
     int op;
     while (ver==true)
     {
-        cout<<"Que ejercicio desea mirar?\n(1)codificacion-decodificacion de textos\n(2)Cajero\n(3)Salir:\n";
+        cout<<"Que ejercicio desea mirar?\n(1)codificacion-decodificacion de textos\n(2)Cajero\n(0)Salir:\n";
         cin>>op;
         if(op==3)
         {
@@ -37,20 +39,23 @@ int main()
             case 1:
             {
                 codificacion_textos();
+                break;
             }
-            break;
+
 
             case 2:
             {
                 cajero();
+                break;
             }
-            break;
+
 
             default:
             {
                 cout<<"opcion incorrecta"<<endl;
+                break;
             }
-            break;
+
         }
         return 0;
     }
@@ -59,14 +64,15 @@ int main()
 
 void cajero()
 {
+    char sudo[12]="fichero.txt";
     bool ver=true;
     int op;
     while (ver==true)
     {
         cout<<"---------------BIENVENIDO AL CAJERO---------------"<<endl;
-        cout<<"Como desea ingresar\n(1)Administrador\n(2)Usuario\n(3)Salir:\n";
+        cout<<"Como desea ingresar\n(1)Administrador\n(2)Usuario\n(0)Salir:\n";
         cin>>op;
-        if(op==3)
+        if(op==0)
         {
             ver=false;
         }
@@ -75,7 +81,7 @@ void cajero()
             case 1:
             {
                 int clave, opcion, saldo,c;
-                char nombre[30],arr[500000],sudo[12]="fichero.txt",codif[100000];
+                char nombre[30],arr[500000],codif[100000];
                 ofstream guardar;
                 guardar.open("fichero.txt",ios::app);//abre desde salto de linea
                 ifstream entrar;
@@ -104,11 +110,13 @@ void cajero()
                             c=leer(sudo,arr);
                             codificar(arr,4,c,codif);//agrega nuevos usuarios y codifica la información
                             escribir(sudo,codif);
+                            guardar.close();
                             break;
                         }
 
                         case 2:
                         {
+
                             char deco[100000],trad[100000],arr[10000],codif[10000];
                             c=leer_sin_bin(sudo,deco);
                             decodif(deco,4,c);
@@ -118,27 +126,31 @@ void cajero()
                             fout.open(sudo);
                             for(int i=1;i<c/8;i++)
                             {                                
-                                fout << trad[i];
+                                fout<<trad[i];
                                 cout<<trad[i];
                             }                                                      
                             fout.close();
                             c=leer(sudo,arr);
-                            codificar(arr,4,c,codif);//guarda la informacion que leí codificada
-                            escribir(sudo,arr);
+                            codificar(codif,4,c,arr);//guarda la informacion que leí codificada
+                            escribir(sudo,codif);
                             cout<<endl;                           
                             break;
                         }
                     }
-                    guardar.close();
+
                 }
-
-
-
             }
             break;
 
             case 2:
             {
+                //Ingresa como Usuario
+                ifstream abrir(sudo);
+                char nomus[40],clave[30],trad[100000];
+                cout<<"Ingrese su nombre de usuario: ";
+                cin>>nomus;
+                cout<<"Ingrese su clave: ";
+                cin>>clave;
 
             }
             break;
