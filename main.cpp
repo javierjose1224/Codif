@@ -10,16 +10,19 @@ using namespace std;
 void cajero();
 void codificacion_textos();
 
+
 void binario(char ,char []);
 void codificar(char [], int , int, char []);
+
+void segundo(char [],int, int, char []);
+void decodif_seg(char [],int, int,char []);
+
 void guardar_codif(char [],char []);
 void decodif(char[], int, int);
 void desbinar(char [],int ,char []);
 void escribir(char [],char []);
 int leer(char [],char []);
 int leer_sin_bin(char [],char []);
-
-void psr_bin_ascii(char sudo[],char []);
 
 
 int main()
@@ -28,7 +31,46 @@ int main()
     int op;
     while (ver==true)
     {
-        cout<<"Que ejercicio desea mirar?\n(1)codificacion-decodificacion de textos\n(2)Cajero\n(0)Salir:\n";
+        cout<<"Que ejercicio desea mirar?\n(1)codificacion-decodificacion de textos\n(2)Cajero\n(3)Salir:\n";
+        cin>>op;
+        if(op==3)
+        {
+            ver=false;
+            break;
+        }
+        switch (op)
+        {
+            case 1:
+            {
+                codificacion_textos();
+            }
+            break;
+
+            case 2:
+            {
+                //cajero();
+            }
+            break;
+
+            default:
+            {
+                cout<<"opcion incorrecta"<<endl;
+            }
+            break;
+        }
+        return 0;
+    }
+
+}
+/*
+void cajero()
+{
+    bool ver=true;
+    int op;
+    while (ver==true)
+    {
+        cout<<"---------------BIENVENIDO AL CAJERO---------------"<<endl;
+        cout<<"Como desea ingresar\n(1)Administrador\n(2)Usuario\n(3)Salir:\n";
         cin>>op;
         if(op==3)
         {
@@ -38,52 +80,9 @@ int main()
         {
             case 1:
             {
-                codificacion_textos();
-                break;
-            }
-
-
-            case 2:
-            {
-                cajero();
-                break;
-            }
-
-
-            default:
-            {
-                cout<<"opcion incorrecta"<<endl;
-                break;
-            }
-
-        }
-        return 0;
-    }
-
-}
-
-void cajero()
-{
-    char sudo[12]="fichero.txt";
-    bool ver=true;
-    int op;
-    while (ver==true)
-    {
-        cout<<"---------------BIENVENIDO AL CAJERO---------------"<<endl;
-        cout<<"Como desea ingresar\n(1)Administrador\n(2)Usuario\n(0)Salir:\n";
-        cin>>op;
-        if(op==0)
-        {
-            ver=false;
-        }
-        switch (op)
-        {
-            case 1:
-            {
                 int clave, opcion, saldo,c;
-                char nombre[30],arr[500000],codif[100000];
+                char ident[10],arr[500000],sudo[12]="fichero.txt",codif[100000],medio[15]="intermedio.txt";
                 ofstream guardar;
-                guardar.open("fichero.txt",ios::app);//abre desde salto de linea
                 ifstream entrar;
                 while(true)
                 {
@@ -100,58 +99,66 @@ void cajero()
                     {
                         case 1:
                         {
-                            cout<<"Ingrese un nombre"<<endl;
-                            cin>>nombre;
+                            guardar.open(sudo,ios::app);//abre desde salto de linea
+                            cout<<"Ingrese Identificación"<<endl;
+                            cin>>ident;
                             cout<<"Ingrese clave: "<<endl;
                             cin>>clave;
                             cout<<"Ingrese saldo: "<<endl;
                             cin>>saldo;
-                            guardar<<nombre<<" "<<clave<<" "<<saldo<<endl;
+                            guardar<<ident<<" "<<clave<<" "<<saldo<<endl;
+                            guardar.close();
                             c=leer(sudo,arr);
                             codificar(arr,4,c,codif);//agrega nuevos usuarios y codifica la información
-                            escribir(sudo,codif);
-                            guardar.close();
+                            escribir(medio,codif);
                             break;
                         }
 
                         case 2:
                         {
-
-                            char deco[100000],trad[100000],arr[10000],codif[10000];
-                            c=leer_sin_bin(sudo,deco);
+                            char nom[20],trad[500000];
+                            char deco[500000];
+                            c=leer_sin_bin(medio,deco);
                             decodif(deco,4,c);
                             desbinar(deco,c,trad);
-                            ifstream fin;
-                            ofstream fout;
-                            fout.open(sudo);
+                            //cout<<deco;
+                            //ifstream fin;
+                            //ofstream fout;
+                            //fout.open(nom);
+                            //cout<<"El texto decodificado es: "<<endl;
                             for(int i=1;i<c/8;i++)
-                            {                                
-                                fout<<trad[i];
+                            {
                                 cout<<trad[i];
-                            }                                                      
-                            fout.close();
-                            c=leer(sudo,arr);
-                            codificar(codif,4,c,arr);//guarda la informacion que leí codificada
-                            escribir(sudo,codif);
-                            cout<<endl;                           
+
+                            }
+                            //fout.close();
+                            cout<<endl;
                             break;
                         }
                     }
 
+
                 }
+
+
+
             }
             break;
 
             case 2:
             {
-                //Ingresa como Usuario
-                ifstream abrir(sudo);
-                char nomus[40],clave[30],trad[100000];
-                cout<<"Ingrese su nombre de usuario: ";
-                cin>>nomus;
-                cout<<"Ingrese su clave: ";
-                cin>>clave;
+                char holanda[40];
+                for(int i=0;i<30;i++)
+                {
+                    holanda[i]=char(i+48);
+                }
+                ifstream fin;
+                ofstream of;
+                of.open("Holanda.txt");
 
+                    of<<holanda;
+
+                of.close();
             }
             break;
 
@@ -163,8 +170,7 @@ void cajero()
         }
     }
 }
-
-
+*/
 void  codificacion_textos()
 {
     int c=0,semilla,opc;
@@ -175,50 +181,156 @@ void  codificacion_textos()
         cin>>opc;
         if (opc==3)
         {
-              break;
+            break;
         }
         switch (opc)
         {
             case 1:
             {
-                char arr[50000]={},codif[50000];
-                char nom[20],nomarch[20];
-                cout<<"ingrese texto a leer para codificar con (.txt): ";
-                cin>>nomarch;
-                c=leer(nomarch,arr);
-                cout<<"Ingrese la semilla: ";
-                cin>>semilla;
-                codificar(arr, semilla, c, codif);
-                cout<<"Donde desea guardar la informacion codificada con (.txt): ";
-                cin>>nom;
-                escribir(nom,codif);
+                bool ban=true;
+                int metcod;
+                while(ban==true)
+                {
+                    cout<<"Que metodo de codificacion desea usar:\n(1)invertir\n(2)posiciones\n(3)Salir:\n";
+                    cin>>metcod;
+                    if(metcod==3)
+                    {
+                        ban=false;
+                        break;
+                    }
+                    switch (metcod)
+                    {
+                        case 1:
+                        {
+                            char arr[50000]={},codif[50000];
+                            char nom[20],nomarch[20];
+                            cout<<"ingrese texto a leer para codificar con (.txt): ";
+                            cin>>nomarch;
+                            c=leer(nomarch,arr);
+                            cout<<"Ingrese la semilla: ";
+                            cin>>semilla;
+                            codificar(arr, semilla, c, codif);
+                            cout<<"Donde desea guardar la informacion codificada con (.txt): ";
+                            cin>>nom;
+                            escribir(nom,codif);
+                            cout<<endl;
+                        }
+                        break;
+
+                        case 2:
+                        {
+                            char arr[50000]={},codif[50000];
+                            char nom[23],nomarch[20];
+                            cout<<"ingrese texto a leer para codificar con (.txt) met 1: ";
+                            cin>>nomarch;
+                            c=leer(nomarch,arr);
+                            cout<<"Ingrese la semilla: ";
+                            cin>>semilla;
+                            segundo(arr,semilla,c,codif);
+                            cout<<codif;
+                            cout<<endl;
+                            cout<<"Donde desea guardar la informacion codificada con (.txt): ";
+                            cin>>nom;
+
+                            escribir(nom,codif);
+                            cout<<endl;
+                        }
+                        break;
+
+                        default:
+                        {
+                            cout<<"Opcion inválida";
+                        }
+                        break;
+                    }
+                }
+
             }
             break;
 
             case 2:
             {
-                char nom[20],nomarch[20],trad[500000];
-                char deco[500000];
-                cout<<"ingrese texto a leer para decodificar con (.txt): ";
-                cin>>nomarch;
-                cout<<"Ingrese la semilla: ";
-                cin>>semilla;
-                c=leer_sin_bin(nomarch,deco);
-                decodif(deco,semilla,c);
-                desbinar(deco,c,trad);
-                cout<<"Donde desea guardar la informacion decodificada con (.txt): ";
-                cin>>nom;
-                ifstream fin;
-                ofstream fout;
-                fout.open(nom);
-                cout<<"El texto decodificado sería: "<<endl;
-                for(int i=1;i<c/8;i++)
+                bool ban=true;
+                while(ban==true)
                 {
-                    cout<<trad[i];
-                    fout <<trad[i];
+                    int metdec;
+                    cout<<"Metodo de decodificacion:\n(1)Invertir\n(2)Posiciones\n(3)Salir:\n";
+                    cin>>metdec;
+                    if(metdec==3)
+                    {
+                        ban=false;
+                        break;
+                    }
+                    switch (metdec)
+                    {
+                        case 1:
+                        {
+                            char nom[20],nomarch[20],trad[500000];
+                            char deco[500000];
+                            cout<<"ingrese texto a leer para decodificar con (.txt): ";
+                            cin>>nomarch;
+                            cout<<"Ingrese la semilla: ";
+                            cin>>semilla;
+                            c=leer_sin_bin(nomarch,deco);
+                            decodif(deco,semilla,c);
+                            desbinar(deco,c,trad);
+                            cout<<"Donde desea guardar la informacion decodificada con (.txt): ";
+                            cin>>nom;
+                            ifstream fin;
+                            ofstream fout;
+                            fout.open(nom);
+                            cout<<"El texto decodificado es: "<<endl;
+                            for(int i=1;i<c/8;i++)
+                            {
+                                cout<<trad[i];
+                                fout <<trad[i];
+                            }
+                            fout.close();
+                            cout<<endl;
+                        }
+                        break;
+
+                        case 2:
+                        {
+                            char nom[20],nomarch[20],trad[500000];
+                            char deco[500000],codif[500000];
+                            cout<<"ingrese texto a leer para decodificar con (.txt): ";
+                            cin>>nomarch;
+                            cout<<"Ingrese la semilla: ";
+                            cin>>semilla;
+                            c=leer_sin_bin(nomarch,codif);
+                            decodif_seg(codif,semilla,c,deco);
+                            desbinar(deco,c,trad);
+                            cout<<"Donde desea guardar la informacion decodificada con (.txt): ";
+                            cin>>nom;
+
+                            ifstream fin;
+                            ofstream fout;
+                            fout.open(nom);
+                            cout<<"El texto decodificado es: "<<endl;
+                            for(int i=1;i<c/8;i++)
+                            {
+                                cout<<trad[i];
+                                fout <<trad[i];
+                            }
+                            fout.close();
+                            cout<<endl;
+                        }
+                        break;
+
+                        default:
+                        {
+                            cout<<"Opcion ivalida";
+                        }
+                        break;
+                    }
                 }
-                fout.close();
-                cout<<endl;
+            }
+            break;
+
+            default:
+            {
+                cout<<"Opcion ivalida";
             }
             break;
         }
@@ -434,6 +546,33 @@ void codificar(char arr[], int sem, int lim, char codif[])
     }
 }
 
+void segundo(char arr[], int sem , int lim,char codif[])
+{
+    int j=0;
+    for(int i=1,b=0; i<=(lim*8)/sem; i++,b++)
+    {
+        codif[b*sem]=arr[(sem*i)-1];
+        for(;j<sem*i;j++)
+        {
+            codif[j+1]=arr[j];
+        }
+    }
+}
+
+
+void decodif_seg(char deco[],int sem, int lim, char codif[])
+{
+    int j=0;
+    for(int i=1,b=0; i<=(lim*8)/sem; i++,b++)
+    {
+        deco[(sem*i)-1]=codif[b*sem];
+        for(;j<sem*i;j++)
+        {
+            deco[j]=codif[j+1];
+        }
+    }
+}
+
 void decodif(char deco[],int sem, int lim)
 {
     int j=0,cero=0,jp,uno=0,con=0,o=0;
@@ -552,7 +691,7 @@ void desbinar(char deco[],int lim,char trad[])
     int j=0,num,con=0;
     int norm;
     char a;
-    for(int i=0;i<lim;i++)
+    for(int i=1;i<lim;i++)
     {
         int pot=7,sum=0;
         for(;j<i*8;j++)
@@ -576,10 +715,6 @@ void escribir(char nom[], char arr[])
     fout << arr;
     fout.close();
 }
-
-
-
-
 
 
 
